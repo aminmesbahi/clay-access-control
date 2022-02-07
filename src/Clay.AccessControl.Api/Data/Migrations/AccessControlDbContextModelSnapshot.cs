@@ -17,6 +17,54 @@ namespace Clay.AccessControl.Api.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
 
+            modelBuilder.Entity("Clay.AccessControl.Api.Models.Audit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AccessResult")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ActionedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClientIp")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LockDescription")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LockId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("LockToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("TagToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(35)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Audits");
+                });
+
             modelBuilder.Entity("Clay.AccessControl.Api.Models.Lock", b =>
                 {
                     b.Property<int>("Id")
@@ -28,6 +76,9 @@ namespace Clay.AccessControl.Api.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("Token")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Locks");
@@ -36,12 +87,14 @@ namespace Clay.AccessControl.Api.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "The Brick House First Door (Tunnel)"
+                            Description = "The Brick House First Door (Tunnel)",
+                            Token = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 2,
-                            Description = "The Brick House Second Door (Office)"
+                            Description = "The Brick House Second Door (Office)",
+                            Token = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -69,37 +122,37 @@ namespace Clay.AccessControl.Api.Data.Migrations
                         {
                             LockId = 1,
                             TagId = 1,
-                            CreateDate = new DateTime(2022, 2, 7, 3, 52, 52, 201, DateTimeKind.Local).AddTicks(109)
+                            CreateDate = new DateTime(2022, 2, 7, 21, 39, 49, 127, DateTimeKind.Local).AddTicks(4513)
                         },
                         new
                         {
                             LockId = 1,
                             TagId = 2,
-                            CreateDate = new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3661)
+                            CreateDate = new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6753)
                         },
                         new
                         {
                             LockId = 1,
                             TagId = 3,
-                            CreateDate = new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3687)
+                            CreateDate = new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6785)
                         },
                         new
                         {
                             LockId = 1,
                             TagId = 4,
-                            CreateDate = new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3691)
+                            CreateDate = new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6790)
                         },
                         new
                         {
                             LockId = 1,
                             TagId = 5,
-                            CreateDate = new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3693)
+                            CreateDate = new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6792)
                         },
                         new
                         {
                             LockId = 1,
                             TagId = 6,
-                            CreateDate = new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3694)
+                            CreateDate = new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6795)
                         });
                 });
 
@@ -177,6 +230,7 @@ namespace Clay.AccessControl.Api.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(35)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

@@ -10,12 +10,35 @@ namespace Clay.AccessControl.Api.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Audits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", maxLength: 35, nullable: false),
+                    TagId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TagToken = table.Column<Guid>(type: "TEXT", nullable: false),
+                    LockId = table.Column<int>(type: "INTEGER", nullable: false),
+                    LockDescription = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false),
+                    LockToken = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AccessResult = table.Column<string>(type: "TEXT", nullable: false),
+                    ClientIp = table.Column<string>(type: "TEXT", maxLength: 15, nullable: false),
+                    ActionedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Audits", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Locks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false)
+                    Description = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false),
+                    Token = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,7 +51,7 @@ namespace Clay.AccessControl.Api.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 35, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,13 +106,13 @@ namespace Clay.AccessControl.Api.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Locks",
-                columns: new[] { "Id", "Description" },
-                values: new object[] { 1, "The Brick House First Door (Tunnel)" });
+                columns: new[] { "Id", "Description", "Token" },
+                values: new object[] { 1, "The Brick House First Door (Tunnel)", new Guid("00000000-0000-0000-0000-000000000000") });
 
             migrationBuilder.InsertData(
                 table: "Locks",
-                columns: new[] { "Id", "Description" },
-                values: new object[] { 2, "The Brick House Second Door (Office)" });
+                columns: new[] { "Id", "Description", "Token" },
+                values: new object[] { 2, "The Brick House Second Door (Office)", new Guid("00000000-0000-0000-0000-000000000000") });
 
             migrationBuilder.InsertData(
                 table: "Users",
@@ -149,32 +172,32 @@ namespace Clay.AccessControl.Api.Data.Migrations
             migrationBuilder.InsertData(
                 table: "LockTag",
                 columns: new[] { "LockId", "TagId", "CreateDate" },
-                values: new object[] { 1, 1, new DateTime(2022, 2, 7, 3, 52, 52, 201, DateTimeKind.Local).AddTicks(109) });
+                values: new object[] { 1, 1, new DateTime(2022, 2, 7, 21, 39, 49, 127, DateTimeKind.Local).AddTicks(4513) });
 
             migrationBuilder.InsertData(
                 table: "LockTag",
                 columns: new[] { "LockId", "TagId", "CreateDate" },
-                values: new object[] { 1, 2, new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3661) });
+                values: new object[] { 1, 2, new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6753) });
 
             migrationBuilder.InsertData(
                 table: "LockTag",
                 columns: new[] { "LockId", "TagId", "CreateDate" },
-                values: new object[] { 1, 3, new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3687) });
+                values: new object[] { 1, 3, new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6785) });
 
             migrationBuilder.InsertData(
                 table: "LockTag",
                 columns: new[] { "LockId", "TagId", "CreateDate" },
-                values: new object[] { 1, 4, new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3691) });
+                values: new object[] { 1, 4, new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6790) });
 
             migrationBuilder.InsertData(
                 table: "LockTag",
                 columns: new[] { "LockId", "TagId", "CreateDate" },
-                values: new object[] { 1, 5, new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3693) });
+                values: new object[] { 1, 5, new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6792) });
 
             migrationBuilder.InsertData(
                 table: "LockTag",
                 columns: new[] { "LockId", "TagId", "CreateDate" },
-                values: new object[] { 1, 6, new DateTime(2022, 2, 7, 3, 52, 52, 204, DateTimeKind.Local).AddTicks(3694) });
+                values: new object[] { 1, 6, new DateTime(2022, 2, 7, 21, 39, 49, 131, DateTimeKind.Local).AddTicks(6795) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_LockTag_TagId",
@@ -189,6 +212,9 @@ namespace Clay.AccessControl.Api.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Audits");
+
             migrationBuilder.DropTable(
                 name: "LockTag");
 
