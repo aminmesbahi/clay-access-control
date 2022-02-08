@@ -1,4 +1,3 @@
-using Clay.AccessControl.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clay.AccessControl.Api.Data;

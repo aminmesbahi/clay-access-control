@@ -1,6 +1,10 @@
 namespace Clay.AccessControl.Api.Models;
 public class Tag
 {
+    public Tag()
+    {
+
+    }
     public Tag(int id, bool isActive, int ownerId, Guid token)
     {
         Id = id;

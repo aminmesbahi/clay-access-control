@@ -1,7 +1,6 @@
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
-using Clay.AccessControl.Api.Data;
-using Clay.AccessControl.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -13,7 +12,15 @@ builder.Services.AddScoped<IAccessControlService, AccessControlService>();
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(ops =>
+    {
+        ops.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        ops.JsonSerializerOptions.WriteIndented = true;
+        ops.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        ops.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+        ops.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(setup =>

@@ -1,4 +1,3 @@
-using Clay.AccessControl.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clay.AccessControl.Api.Data;
@@ -49,6 +48,7 @@ public class AccessControlDbContext : DbContext, IAccessControlDbContext
         modelBuilder.Entity<User>().HasData(Seed.Users);
         modelBuilder.Entity<Tag>().HasData(Seed.Tags);
         modelBuilder.Entity<LockTag>().HasData(Seed.LockTags);
+        modelBuilder.Entity<Audit>().HasData(Seed.Audits);
         #endregion
 
         base.OnModelCreating(modelBuilder);

@@ -1,10 +1,11 @@
 namespace Clay.AccessControl.Api.Models;
 public class Lock
 {
-    public Lock(int id, string description)
+    public Lock(int id, string description, Guid token)
     {
         Id = id;
         Description = description;
+        Token = token;
     }
 
     public int Id { get; set; }

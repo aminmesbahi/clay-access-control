@@ -1,23 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3525C30C-EF58-422C-8F96-EDFDD648CD23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clay.AccessControl.Api", "src\Clay.AccessControl.Api\Clay.AccessControl.Api.csproj", "{D6E836A2-7CAE-4125-A6E2-DF98BB2B6838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clay.AccessControl.Api", "src\Clay.AccessControl.Api\Clay.AccessControl.Api.csproj", "{D6E836A2-7CAE-4125-A6E2-DF98BB2B6838}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C061F3EA-0CA7-4E08-9DED-BB95635BC49B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clay.AccessControl.Api.Test", "tests\Clay.AccessControl.Api.Test\Clay.AccessControl.Api.Test.csproj", "{C829B568-F376-4D6C-8359-EEA00D6F8193}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clay.AccessControl.Api.Test", "tests\Clay.AccessControl.Api.Test\Clay.AccessControl.Api.Test.csproj", "{C829B568-F376-4D6C-8359-EEA00D6F8193}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D6E836A2-7CAE-4125-A6E2-DF98BB2B6838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -29,8 +26,14 @@ Global
 		{C829B568-F376-4D6C-8359-EEA00D6F8193}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C829B568-F376-4D6C-8359-EEA00D6F8193}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D6E836A2-7CAE-4125-A6E2-DF98BB2B6838} = {3525C30C-EF58-422C-8F96-EDFDD648CD23}
 		{C829B568-F376-4D6C-8359-EEA00D6F8193} = {C061F3EA-0CA7-4E08-9DED-BB95635BC49B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A610691D-DC0A-4617-936A-50B2D817FBBC}
 	EndGlobalSection
 EndGlobal

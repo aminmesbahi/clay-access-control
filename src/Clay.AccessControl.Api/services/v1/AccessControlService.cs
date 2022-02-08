@@ -12,9 +12,17 @@ public class AccessControlService : IAccessControlService
         _context = serviceProvider.GetRequiredService<AccessControlDbContext>();
     }
 
-    public bool AccessRequest(Guid Lock, Guid Tag)
+    public async Task<bool> AccessRequestAsync(AccessRequestDto request)
     {
-        throw new NotImplementedException();
+        var lck = await _context.Tags.Include(x => x.OpeningLocks).Where(x => x.Token == request.Tag && x.IsActive == true && x.OpeningLocks.Count(y => y.Token == request.Lock) == 1).SingleOrDefaultAsync();
+        return lck!=null;
+    }
+
+    public async Task Audit(Audit audit)
+    {
+        await _context.Audits.AddAsync(audit);
+        await _context.SaveChangesAsync();
+
     }
 
     public async Task<GetAuditListResponseDto> GetAccessHistoryByPageAsync(int limit, int page, CancellationToken cancellationToken)
