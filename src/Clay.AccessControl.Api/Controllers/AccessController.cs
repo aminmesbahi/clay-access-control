@@ -11,6 +11,7 @@ public class AccessController : ControllerBase
 {
     private readonly ILogger<AccessController> _logger;
     private readonly IAccessControlService _service;
+    public record UrlQueryParameters(int Limit = 50, int Page = 1);
     public AccessController(ILogger<AccessController> logger, IAccessControlService service)
     {
         _logger = logger;
@@ -31,15 +32,63 @@ public class AccessController : ControllerBase
             return BadRequest();
         }
 
-        var hobbies = await _service.GetAccessHistoryByPageAsync(
+        var audits = await _service.GetAccessHistoryByPageAsync(
                                 urlQueryParameters.Limit,
                                 urlQueryParameters.Page,
                                 cancellationToken);
 
-        return Ok(hobbies);
+        return Ok(audits);
     }
 
-public record UrlQueryParameters(int Limit = 50, int Page = 1);
+
+    [SwaggerOperation("Get audit history for specific user with pagination")]
+    [HttpGet("GetAuditListForUser")]
+    [ProducesResponseType(typeof(GetAuditListResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetAuditListForUserAsync(
+        [FromQuery] int userId,
+        [FromQuery] UrlQueryParameters urlQueryParameters,
+        CancellationToken cancellationToken)
+    {
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var audits = await _service.GetUserAccessHistoryByPageAsync(
+                                userId,
+                                urlQueryParameters.Limit,
+                                urlQueryParameters.Page,
+                                cancellationToken);
+
+        return Ok(audits);
+    }
+
+    [SwaggerOperation("Get audit history for specific lock with pagination")]
+    [HttpGet("GetAuditListForLock")]
+    [ProducesResponseType(typeof(GetAuditListResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetAuditListForLockAsync(
+        [FromQuery] Guid lockId,
+        [FromQuery] UrlQueryParameters urlQueryParameters,
+        CancellationToken cancellationToken)
+    {
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var audits = await _service.GetLockAccessHistoryByPageAsync(
+                                lockId,
+                                urlQueryParameters.Limit,
+                                urlQueryParameters.Page,
+                                cancellationToken);
+
+        return Ok(audits);
+    }
+
 
 #pragma warning disable CS1573
     /// <summary>
@@ -63,7 +112,7 @@ public record UrlQueryParameters(int Limit = 50, int Page = 1);
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(bool))]
     [HttpPost("AccessRequest")]
-    public async Task<bool> GetWorkloadCalculationsHistoryAsync(AccessRequestDto request, CancellationToken cancellationToken)
+    public async Task<bool> AccessRequestAsync(AccessRequestDto request, CancellationToken cancellationToken)
     {
         IPAddress remoteIpAddress = HttpContext.Connection.RemoteIpAddress ?? IPAddress.Parse("127.0.0.1");
         return await _service.AccessRequestAsync(request, remoteIpAddress);
