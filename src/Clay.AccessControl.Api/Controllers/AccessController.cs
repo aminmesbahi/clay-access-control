@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace Clay.AccessControl.Api.Controllers;
 
@@ -16,7 +17,8 @@ public class AccessController : ControllerBase
         _service = service;
     }
 
-    [HttpGet(Name = nameof(GetAuditListAsync))]
+    [SwaggerOperation("Get audit history with pagination")]
+    [HttpGet("GetAuditList")]
     [ProducesResponseType(typeof(GetAuditListResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAuditListAsync(
@@ -63,7 +65,8 @@ public record UrlQueryParameters(int Limit = 50, int Page = 1);
     [HttpPost("AccessRequest")]
     public async Task<bool> GetWorkloadCalculationsHistoryAsync(AccessRequestDto request, CancellationToken cancellationToken)
     {
-        return await _service.AccessRequestAsync(request);
+        IPAddress remoteIpAddress = HttpContext.Connection.RemoteIpAddress ?? IPAddress.Parse("127.0.0.1");
+        return await _service.AccessRequestAsync(request, remoteIpAddress);
     }
 #pragma warning restore CS1573
 }

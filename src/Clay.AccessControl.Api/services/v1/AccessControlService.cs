@@ -12,9 +12,10 @@ public class AccessControlService : IAccessControlService
         _context = serviceProvider.GetRequiredService<AccessControlDbContext>();
     }
 
-    public async Task<bool> AccessRequestAsync(AccessRequestDto request)
+    public async Task<bool> AccessRequestAsync(AccessRequestDto request,System.Net.IPAddress remoteIpAddress)
     {
         var lck = await _context.Tags.Include(x => x.OpeningLocks).Where(x => x.Token == request.Tag && x.IsActive == true && x.OpeningLocks.Count(y => y.Token == request.Lock) == 1).SingleOrDefaultAsync();
+        await MakeAuditAsync(request, lck != null, remoteIpAddress);        
         return lck!=null;
     }
 
@@ -24,12 +25,58 @@ public class AccessControlService : IAccessControlService
         await _context.SaveChangesAsync();
 
     }
+    private async Task MakeAuditAsync(AccessRequestDto request, bool isSuccessful, System.Net.IPAddress remoteIpAddress)
+    {
+        var audit = new Audit();
+        audit.ActionedAt = DateTime.UtcNow;
+        audit.ClientIp = remoteIpAddress.ToString();
+        audit.LockToken = request.Lock;
+        audit.TagToken = request.Tag;
+        audit.AccessResult = isSuccessful ? "Opened" : "NOT AUTHORIZED :: ";
+        // When everything is OK
+        if (isSuccessful)
+        {
+            var qry = await _context.Tags.Include(x => x.OpeningLocks).Include(x=>x.Owner).Include(x=>x.OpeningLocks).Where(x => x.Token == request.Tag).SingleOrDefaultAsync();
+            audit.TagId = qry!.Id;
+            audit.LockId=qry.OpeningLocks.Where(x=>x.Token==request.Lock).FirstOrDefault()!.Id;
+            audit.LockDescription= qry.OpeningLocks.Where(x => x.Token == request.Lock).FirstOrDefault()!.Description;
+            audit.UserName = qry.Owner.Name;
+            audit.UserId = qry.OwnerId; 
+        }
+        else
+        {
+            var qry = await _context.Tags.Include(x => x.OpeningLocks).Include(x => x.Owner).Include(x => x.OpeningLocks).Where(x => x.Token == request.Tag).SingleOrDefaultAsync();
+            audit.LockId = _context.Locks.Where(x => x.Token == request.Lock).FirstOrDefault()!.Id;
+            audit.LockDescription = _context.Locks.Where(x => x.Token == request.Lock).FirstOrDefault()!.Description;
+
+            // When tag in not active OR tag exists but not authorized
+            if (qry != null)
+            {
+                audit.TagId = qry.Id;
+                audit.UserName = qry.Owner.Name;
+                audit.UserId = qry.OwnerId;
+                if (!qry.IsActive) { audit.AccessResult += "Tag is not active"; }
+                else if (qry.OpeningLocks.Where(x => x.Token == request.Tag).Count() == 0 && qry.IsActive) { audit.AccessResult += "Tag not authorized"; }
+            }
+            //When tag not exists
+            else
+            {
+                audit.TagId = -1;
+                audit.UserName = "NA";
+                audit.UserId = -1;
+                audit.AccessResult += "Tag not exists";
+            }
+        }
+ 
+        _context.Audits.Add(audit);
+        await _context.SaveChangesAsync();
+    }
 
     public async Task<GetAuditListResponseDto> GetAccessHistoryByPageAsync(int limit, int page, CancellationToken cancellationToken)
     {
         var history = await _context.Audits
                            .AsNoTracking()
-                           .OrderBy(p => p.ActionedAt)
+                           .OrderByDescending(p => p.ActionedAt)
                            .PaginateAsync(page, limit, cancellationToken);
 
         return new GetAuditListResponseDto
