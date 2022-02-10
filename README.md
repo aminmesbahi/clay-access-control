@@ -3,7 +3,8 @@
 
 ---
 ## [Live Demo (Swagger, API) ](https://clay.mesbahi.net/swagger/index.html)
-## [Video Presentation](https://youtube.com)
+## [Video Presentation](https://youtu.be/JZmARtoBAKg)
+## [The Postman file]()
 ---
 ## About Implementation
 > Since there was little data provided about the details and deciding about a large part of the analysis and design of the implementation was my responsibility. So, I started designing and implementing the backend of services to authorize tags to [open|not open] locks and APIs to get audit histories (All records, for a specific user, and for a specific lock).

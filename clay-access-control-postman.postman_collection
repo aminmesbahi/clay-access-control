@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "464bf9ae-1d05-48c0-a838-6826cb4b7dd0",
+		"name": "Clay Access Control",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Check Audit History (All Audits)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://clay.mesbahi.net/v1/Access/GetAuditList?Limit=100&Page=1",
+					"protocol": "https",
+					"host": [
+						"clay",
+						"mesbahi",
+						"net"
+					],
+					"path": [
+						"v1",
+						"Access",
+						"GetAuditList"
+					],
+					"query": [
+						{
+							"key": "Limit",
+							"value": "100"
+						},
+						{
+							"key": "Page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Audit History (for a specific user)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://clay.mesbahi.net/v1/Access/GetAuditListForUser?Limit=100&Page=1&userId=2",
+					"protocol": "https",
+					"host": [
+						"clay",
+						"mesbahi",
+						"net"
+					],
+					"path": [
+						"v1",
+						"Access",
+						"GetAuditListForUser"
+					],
+					"query": [
+						{
+							"key": "Limit",
+							"value": "100"
+						},
+						{
+							"key": "Page",
+							"value": "1"
+						},
+						{
+							"key": "userId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Audit History (for a specific lock-lock1)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://clay.mesbahi.net/v1/Access/GetAuditListForUser?Limit=100&Page=1&lockId=7025cdba-4810-47d9-acdc-99f48766c0aa",
+					"protocol": "https",
+					"host": [
+						"clay",
+						"mesbahi",
+						"net"
+					],
+					"path": [
+						"v1",
+						"Access",
+						"GetAuditListForUser"
+					],
+					"query": [
+						{
+							"key": "Limit",
+							"value": "100"
+						},
+						{
+							"key": "Page",
+							"value": "1"
+						},
+						{
+							"key": "lockId",
+							"value": "7025cdba-4810-47d9-acdc-99f48766c0aa"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Audit History (for a specific lock-lock2)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://clay.mesbahi.net/v1/Access/GetAuditListForUser?Limit=100&Page=1&lockId=d5bc20c6-4a33-4b18-aa89-589b1e3382df",
+					"protocol": "https",
+					"host": [
+						"clay",
+						"mesbahi",
+						"net"
+					],
+					"path": [
+						"v1",
+						"Access",
+						"GetAuditListForUser"
+					],
+					"query": [
+						{
+							"key": "Limit",
+							"value": "100"
+						},
+						{
+							"key": "Page",
+							"value": "1"
+						},
+						{
+							"key": "lockId",
+							"value": "d5bc20c6-4a33-4b18-aa89-589b1e3382df"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authorized Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lock\": \"7025cdba-4810-47d9-acdc-99f48766c0aa\",\r\n    \"tag\": \"6f5f6b36-ace9-401e-8e97-5dea550e2b3d\"\r\n}"
+				},
+				"url": {
+					"raw": "https://clay.mesbahi.net/v1/AccessRequest",
+					"protocol": "https",
+					"host": [
+						"clay",
+						"mesbahi",
+						"net"
+					],
+					"path": [
+						"v1",
+						"AccessRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tag not authorized",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lock\": \"d5bc20c6-4a33-4b18-aa89-589b1e3382df\",\r\n    \"tag\": \"a85b118a-95bf-4a31-8e07-d873c37434dd\"\r\n}"
+				},
+				"url": {
+					"raw": "https://clay.mesbahi.net/v1/AccessRequest",
+					"protocol": "https",
+					"host": [
+						"clay",
+						"mesbahi",
+						"net"
+					],
+					"path": [
+						"v1",
+						"AccessRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tag is disabled",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lock\": \"f330243e-3314-4f41-9bd3-8577b2faf823\",\r\n    \"tag\": \"f330243e-3314-4f41-9bd3-8577b2faf823\"\r\n}"
+				},
+				"url": {
+					"raw": "https://clay.mesbahi.net/v1/AccessRequest",
+					"protocol": "https",
+					"host": [
+						"clay",
+						"mesbahi",
+						"net"
+					],
+					"path": [
+						"v1",
+						"AccessRequest"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
